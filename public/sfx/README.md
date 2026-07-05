@@ -1,6 +1,6 @@
 # 効果音の出典
 
-すべて [Kenney.nl](https://kenney.nl) の CC0(パブリックドメイン)音源パックから採用し、OGG → MP3 に変換したもの。
+slam.mp3 を除き、[Kenney.nl](https://kenney.nl) の CC0(パブリックドメイン)音源パックから採用し、OGG → MP3 に変換したもの。
 
 | ファイル | 元ファイル | パック |
 |---|---|---|
@@ -17,7 +17,7 @@
 | result.mp3 | threeTone2.ogg | Digital Audio |
 | record.mp3 | powerUp8.ogg | Digital Audio |
 | fire.mp3 | impactPlate_heavy_002.ogg | [Impact Sounds](https://kenney.nl/assets/impact-sounds) |
-| slam.mp3 | impactPunch_heavy_001.ogg | Impact Sounds |
+| slam.mp3 | 自作の合成音(金属バットの「カキーン」をサイン波合成) | — |
 | stamp.mp3 | impactWood_heavy_001.ogg | Impact Sounds |
 
 ライセンス: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — クレジット表記不要・商用利用可。
