@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
+import { mockCallClaude } from "./mock";
 
 /**
  * claude -p (Claude Code CLI ヘッドレスモード) を子プロセスとして呼ぶラッパー。
@@ -27,6 +28,11 @@ interface ClaudeCallOptions {
 }
 
 export async function callClaude(opts: ClaudeCallOptions): Promise<ClaudeCallResult> {
+  // デバッグ用モックモード: LLMを呼ばず固定パターンの応答を返す
+  if (process.env.DAMARE_MOCK === "1") {
+    return mockCallClaude(opts);
+  }
+
   mkdirSync(RUNTIME_DIR, { recursive: true });
 
   const args = [

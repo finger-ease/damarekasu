@@ -20,6 +20,7 @@ http://localhost:3000 を開く。
 
 - 相手の応答には1ターンあたり数秒〜20秒程度かかる(手元のClaude Codeが演技を考えている時間)
 - 使用モデルは環境変数 `DAMARE_MODEL` で変更可能(既定: `sonnet`)
+- UIや演出のデバッグには `npm run dev:mock`(環境変数 `DAMARE_MOCK=1`)を使うと、LLMを呼ばずに固定パターンのモック応答が即座に返る
 
 ## 遊び方
 
