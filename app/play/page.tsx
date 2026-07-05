@@ -15,6 +15,7 @@ import { getCharacter } from "@/lib/characters";
 import { GAUGE_MAX, calcScore, finisherLevel, gaugeGain, grantTitle, type GameStats } from "@/lib/game";
 import { loadRecords, saveResult } from "@/lib/records";
 import { sfx } from "@/lib/sfx";
+import { voice } from "@/lib/voice";
 import type { ChatMessage, Emotion, FeedbackResult, SessionResponse } from "@/lib/types";
 
 export default function PlayPage() {
@@ -65,6 +66,21 @@ function Game() {
     setGauge(gaugeRef.current);
   }, []);
 
+  // セリフの音声を合成してから、テキスト表示と同時に読み上げる(合成中は考え中表示のまま)
+  const applyTurnWithVoice = useCallback(
+    async (data: SessionResponse) => {
+      const audio = character
+        ? await voice.prepare(data.turn.reply, character.id, data.turn.emotion)
+        : null;
+      applyTurn(data);
+      voice.play(audio);
+    },
+    [applyTurn, character],
+  );
+
+  // 画面を離れたら読み上げを止める
+  useEffect(() => () => voice.stop(), []);
+
   // セッション開始(相手の第一声)
   useEffect(() => {
     if (!character || !topic || startedRef.current) return;
@@ -78,13 +94,13 @@ function Game() {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "セッション開始に失敗しました");
-        applyTurn(data);
+        await applyTurnWithVoice(data);
         setPhase("battle");
       } catch (e) {
         setError((e as Error).message);
       }
     })();
-  }, [character, topic, applyTurn]);
+  }, [character, topic, applyTurnWithVoice]);
 
   const send = useCallback(
     async (text: string) => {
@@ -101,7 +117,7 @@ function Game() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? "送信に失敗しました");
         statsRef.current.turns += 1;
-        applyTurn(data);
+        await applyTurnWithVoice(data);
       } catch (e) {
         setError((e as Error).message);
         // 失敗したユーザー発言は取り消して再入力してもらう
@@ -110,11 +126,12 @@ function Game() {
         setThinking(false);
       }
     },
-    [applyTurn],
+    [applyTurnWithVoice],
   );
 
   const fireFinisher = useCallback(() => {
     if (!character) return;
+    voice.stop();
     sfx.play("fire");
     const finalStats: GameStats = {
       ...statsRef.current,

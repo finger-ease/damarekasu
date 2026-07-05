@@ -93,12 +93,13 @@ export const sfx = {
   },
 };
 
-function subscribe(listener: () => void): () => void {
+/** ミュート状態の変更を購読する(音声読み上げの即時停止などに使う) */
+export function subscribeMuted(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
 
 /** ミュート状態を購読するフック(表示用) */
 export function useMuted(): boolean {
-  return useSyncExternalStore(subscribe, () => sfx.isMuted(), () => false);
+  return useSyncExternalStore(subscribeMuted, () => sfx.isMuted(), () => false);
 }

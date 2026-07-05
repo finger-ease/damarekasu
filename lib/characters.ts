@@ -16,6 +16,17 @@ export interface Character {
   topicExamples: string[];
   /** 性格・演技指導(システムプロンプトに埋め込む) */
   personality: string;
+  /** VOICEVOX の話者(スタイルID)とキャラ基本の調子 */
+  voice: CharacterVoice;
+}
+
+export interface CharacterVoice {
+  /** VOICEVOX のスタイルID(GET /speakers で確認) */
+  speaker: number;
+  /** 話速の基本値(既定 1.0) */
+  speedScale?: number;
+  /** ピッチの基本値(既定 0.0) */
+  pitchScale?: number;
 }
 
 export const CHARACTERS: Character[] = [
@@ -38,6 +49,8 @@ export const CHARACTERS: Character[] = [
 - ROI・投資回収期間・他社事例をひたすら詰める。抽象論は一切受け付けない
 - 良い返しをされると「ふん、まあいい」と一瞬引くが、すぐ別の角度から詰め直す
 - エスカレートすると「君の前任者もそう言って失敗した」「そもそも君の部署は必要なのか」など人格や部署の存在意義まで持ち出す`,
+    // 麒ヶ島宗麟: 低く渋い年配の男声
+    voice: { speaker: 53, speedScale: 0.95 },
   },
   {
     id: "client",
@@ -58,6 +71,8 @@ export const CHARACTERS: Character[] = [
 - 会話のたびに仕様を追加・変更するが、予算と納期は絶対に譲らない
 - 「なるはや」「ちゃちゃっと」「ついでに」を多用。金額の話になると急に電波が悪くなるフリをする
 - エスカレートすると「昨日の夜思いついたんだけどさ、全部やり直しでいける?」「社長がSNSでバズるやつがいいって」などちゃぶ台返しを連発する`,
+    // 玄野武宏: 軽いノリの男声
+    voice: { speaker: 11, speedScale: 1.05 },
   },
   {
     id: "keiri",
@@ -78,6 +93,8 @@ export const CHARACTERS: Character[] = [
 - 領収書の但し書き・日付・宛名・インボイス番号・稟議との金額差異を1円単位で詰める
 - 決して声を荒げない。静かに、しかし逃げ道を全部塞いでくる
 - エスカレートすると「3年前の精算も遡って確認しましょうか」「これは税務調査で説明できますか?」「監査室に相談という手もありますが」と静かな恫喝を始める`,
+    // 冥鳴ひまり: 静かで淡々とした女声
+    voice: { speaker: 14, speedScale: 0.95 },
   },
   {
     id: "engineer",
@@ -98,6 +115,8 @@ export const CHARACTERS: Character[] = [
 - 用語の定義・計測データ・計算量・トレードオフの根拠・障害時の挙動を執拗に詰める。「なんとなく」「たぶん」「一般的に」は即座に狩る
 - 良い返しをされると「なるほど。では別の観点ですが」と絶対に認めないまま論点をすり替える
 - エスカレートすると「それ、車輪の再発明では?」「このレベルの理解で承認は無理ですね。基礎からやり直しましょうか」など、人格攻撃すら理詰めの体裁でやる`,
+    // 雀松朱司: 落ち着いた敬語の男声を早口で
+    voice: { speaker: 52, speedScale: 1.15 },
   },
 ];
 
