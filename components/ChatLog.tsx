@@ -26,7 +26,9 @@ export function ChatLog({ open, onClose, messages, opponentName, topic }: Props)
           />
           <motion.aside
             // z-[70]: MuteButton (z-[60]) より手前に重ね、右寄せの閉じるボタンへのクリックを妨げない
-            className="koma fixed right-0 top-0 z-[70] h-full w-full max-w-md overflow-y-auto !border-r-0 !shadow-none p-6"
+            // 余白は aside ではなく子要素側に持たせる(aside に p-6 + ヘッダーに負マージンだと
+            // sticky が押し戻された分だけ先頭メッセージの名前がヘッダーの下に隠れるため)
+            className="koma fixed right-0 top-0 z-[70] h-full w-full max-w-md overflow-y-auto !border-r-0 !shadow-none"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -35,7 +37,7 @@ export function ChatLog({ open, onClose, messages, opponentName, topic }: Props)
           >
             {/* スクロールしても議題が見えるよう、ヘッダーごと上端に張り付ける */}
             {/* 下の余白はマージンだと背景が透けて本文が覗くため、パディングで背景ごと覆う */}
-            <div className="sticky top-0 z-10 -mx-6 -mt-6 bg-paper px-6 pb-4 pt-6">
+            <div className="sticky top-0 z-10 bg-paper px-6 pb-4 pt-6">
               <div className="flex items-center justify-between border-b-4 border-ink pb-2">
                 <h2 className="manga-display text-xl">議事録</h2>
                 <button
@@ -53,7 +55,7 @@ export function ChatLog({ open, onClose, messages, opponentName, topic }: Props)
                 <p className="text-sm font-bold leading-relaxed">{topic}</p>
               </div>
             </div>
-            <ol className="space-y-4">
+            <ol className="space-y-4 px-6 pb-6">
               {messages.map((m, i) => (
                 <li key={i}>
                   <p className="mb-1 text-[11px] font-black tracking-widest text-ink/60">
