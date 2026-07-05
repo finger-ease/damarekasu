@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CharacterPortrait } from "@/components/CharacterPortrait";
+import { bgm } from "@/lib/bgm";
 import { CHARACTERS, type Character } from "@/lib/characters";
 import { loadRecords, type CharacterRecord } from "@/lib/records";
 import { sfx } from "@/lib/sfx";
@@ -21,6 +22,8 @@ export default function SelectPage() {
 
   useEffect(() => {
     setRecords(loadRecords());
+    // 初回ロード時は自動再生ポリシーで保留され、最初のクリックで鳴り出す
+    bgm.play("title");
   }, []);
 
   useEffect(() => {

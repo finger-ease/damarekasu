@@ -12,6 +12,7 @@ import { ChatLog } from "@/components/ChatLog";
 import { ChatInput } from "@/components/ChatInput";
 import { ResultScreen } from "@/components/ResultScreen";
 import { RetreatDialog } from "@/components/RetreatDialog";
+import { bgm } from "@/lib/bgm";
 import { getCharacter } from "@/lib/characters";
 import { GAUGE_MAX, calcScore, finisherLevel, gaugeGain, grantTitle, type GameStats } from "@/lib/game";
 import { loadRecords, saveResult } from "@/lib/records";
@@ -82,6 +83,19 @@ function Game() {
 
   // 画面を離れたら読み上げを止める
   useEffect(() => () => voice.stop(), []);
+
+  // フェーズとゲージに応じてBGMを切り替える(同じ曲の再指定はbgm側で無視される)
+  useEffect(() => {
+    if (!character || !topic) return;
+    if (phase === "opening" || phase === "battle") {
+      // ゲージがLv3域(75以上)に入ったら追い込みアレンジへ
+      bgm.play(finisherLevel(gauge) >= 3 ? "battleMax" : "battle");
+    } else if (phase === "finisher") {
+      bgm.play("finisher"); // 非ループのジングル。鳴り終わったら無音のまま
+    } else {
+      bgm.play("result");
+    }
+  }, [phase, gauge, character, topic]);
 
   // セッション開始(相手の第一声)
   useEffect(() => {

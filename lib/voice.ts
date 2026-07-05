@@ -1,3 +1,4 @@
+import { bgm } from "@/lib/bgm";
 import { sfx, subscribeMuted } from "@/lib/sfx";
 import type { Emotion } from "@/lib/types";
 
@@ -19,7 +20,10 @@ if (typeof window !== "undefined") {
 
 function releaseAudio(audio: HTMLAudioElement) {
   URL.revokeObjectURL(audio.src);
-  if (current === audio) current = null;
+  if (current === audio) {
+    current = null;
+    bgm.setDucked(false);
+  }
 }
 
 export const voice = {
@@ -51,6 +55,8 @@ export const voice = {
       return;
     }
     current = audio;
+    // 読み上げ中はBGMを絞って聞き取りやすくする(終了・中断時に戻る)
+    bgm.setDucked(true);
     audio.addEventListener("ended", () => releaseAudio(audio), { once: true });
     // 自動再生ポリシーで拒否されたら黙ってスキップ(リロード直後の第一声など)
     audio.play().catch(() => releaseAudio(audio));

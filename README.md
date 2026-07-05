@@ -37,6 +37,12 @@ http://localhost:3000 を開く。
 - 発注仕様: [docs/illustration-spec.md](docs/illustration-spec.md)
 - 全18カットの発注プロンプト(日英): [docs/illustration-prompts.md](docs/illustration-prompts.md)
 
+## BGMの差し替え(音楽生成AI)
+
+BGMは未配置なら無音でスキップされる。`public/bgm/` に規定のファイル名(`title.mp3` / `battle.mp3` / `battle-max.mp3` / `finisher.mp3` / `result.mp3`)でMP3を置くだけで、場面に応じて自動再生される。
+
+- 配置仕様と生成AI用プロンプト: [public/bgm/README.md](public/bgm/README.md)
+
 ## 構成
 
 - `lib/claude.ts` — `claude -p` のspawnラッパー(初回 `--system-prompt` / 継続 `--resume`)

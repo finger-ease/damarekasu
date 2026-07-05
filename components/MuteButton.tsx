@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { sfx, useMuted } from "@/lib/sfx";
 
-/** 全画面に常駐する効果音オン・オフボタン。効果音のプリロード起点も兼ねる。 */
+/** 全画面に常駐するサウンド(効果音・BGM・読み上げ)オン・オフボタン。効果音のプリロード起点も兼ねる。 */
 export function MuteButton() {
   const muted = useMuted();
 
@@ -15,7 +15,7 @@ export function MuteButton() {
     <button
       type="button"
       aria-pressed={muted}
-      aria-label="効果音のオン・オフ"
+      aria-label="サウンドのオン・オフ"
       onClick={() => {
         sfx.toggleMuted();
         // 解除時は確認音を鳴らす(toggle後の状態で判定)
