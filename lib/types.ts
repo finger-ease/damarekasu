@@ -18,6 +18,11 @@ export interface SessionResponse {
   turn: OpponentTurn;
 }
 
+/** お題自動生成APIのレスポンス */
+export interface TopicResponse {
+  topics: string[];
+}
+
 export interface FeedbackResult {
   summary: string;
   good: string[];
