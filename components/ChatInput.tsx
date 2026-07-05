@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   disabled: boolean;
@@ -9,6 +9,13 @@ interface Props {
 
 export function ChatInput({ disabled, onSend }: Props) {
   const [text, setText] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!disabled) {
+      textareaRef.current?.focus();
+    }
+  }, [disabled]);
 
   const submit = () => {
     const t = text.trim();
@@ -20,6 +27,7 @@ export function ChatInput({ disabled, onSend }: Props) {
   return (
     <div className="koma flex items-end gap-3 p-3">
       <textarea
+        ref={textareaRef}
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => {
