@@ -297,6 +297,7 @@ function Game() {
         }}
         messages={messages}
         opponentName={character.name}
+        topic={topic}
       />
 
       <RetreatDialog

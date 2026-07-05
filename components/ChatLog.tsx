@@ -8,10 +8,11 @@ interface Props {
   onClose: () => void;
   messages: ChatMessage[];
   opponentName: string;
+  topic: string;
 }
 
 /** 議事録ドロワー: これまでのやり取りの全文 */
-export function ChatLog({ open, onClose, messages, opponentName }: Props) {
+export function ChatLog({ open, onClose, messages, opponentName, topic }: Props) {
   return (
     <AnimatePresence>
       {open && (
@@ -24,23 +25,33 @@ export function ChatLog({ open, onClose, messages, opponentName }: Props) {
             onClick={onClose}
           />
           <motion.aside
-            className="koma fixed right-0 top-0 z-40 h-full w-full max-w-md overflow-y-auto !border-r-0 !shadow-none p-6"
+            // z-[70]: MuteButton (z-[60]) より手前に重ね、右寄せの閉じるボタンへのクリックを妨げない
+            className="koma fixed right-0 top-0 z-[70] h-full w-full max-w-md overflow-y-auto !border-r-0 !shadow-none p-6"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 320, damping: 32 }}
             aria-label="議事録"
           >
-            <div className="mb-4 flex items-center justify-between border-b-4 border-ink pb-2">
-              <h2 className="manga-display text-xl">議事録</h2>
-              <button
-                type="button"
-                onClick={onClose}
-                // 右上に常駐する MuteButton と重ならないよう左に避ける
-                className="koma mr-24 px-3 py-1 text-sm font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
-              >
-                閉じる
-              </button>
+            {/* スクロールしても議題が見えるよう、ヘッダーごと上端に張り付ける */}
+            {/* 下の余白はマージンだと背景が透けて本文が覗くため、パディングで背景ごと覆う */}
+            <div className="sticky top-0 z-10 -mx-6 -mt-6 bg-paper px-6 pb-4 pt-6">
+              <div className="flex items-center justify-between border-b-4 border-ink pb-2">
+                <h2 className="manga-display text-xl">議事録</h2>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="koma px-3 py-1 text-sm font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
+                >
+                  閉じる
+                </button>
+              </div>
+              <div className="border-b-4 border-ink py-2">
+                <p className="text-[11px] font-black tracking-widest text-ink/60">
+                  議題
+                </p>
+                <p className="text-sm font-bold leading-relaxed">{topic}</p>
+              </div>
             </div>
             <ol className="space-y-4">
               {messages.map((m, i) => (
