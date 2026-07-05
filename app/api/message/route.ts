@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { callClaude, extractJson } from "@/lib/claude";
+import { withTurnDirection } from "@/lib/characters";
 import { normalizeTurn } from "@/lib/game";
 import type { OpponentTurn, SessionResponse } from "@/lib/types";
 
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
 
     const result = await callClaude({
       resumeSessionId: sessionId,
-      prompt: message.trim(),
+      prompt: withTurnDirection(message.trim()),
     });
 
     const raw = extractJson<OpponentTurn>(result.text);
