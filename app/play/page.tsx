@@ -11,6 +11,7 @@ import { FinisherOverlay } from "@/components/FinisherOverlay";
 import { ChatLog } from "@/components/ChatLog";
 import { ChatInput } from "@/components/ChatInput";
 import { ResultScreen } from "@/components/ResultScreen";
+import { RetreatDialog } from "@/components/RetreatDialog";
 import { getCharacter } from "@/lib/characters";
 import { GAUGE_MAX, calcScore, finisherLevel, gaugeGain, grantTitle, type GameStats } from "@/lib/game";
 import { loadRecords, saveResult } from "@/lib/records";
@@ -41,6 +42,7 @@ function Game() {
   const [gauge, setGauge] = useState(0);
   const [spiky, setSpiky] = useState(false);
   const [logOpen, setLogOpen] = useState(false);
+  const [retreatOpen, setRetreatOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<GameStats | null>(null);
   const [feedback, setFeedback] = useState<FeedbackResult | null>(null);
@@ -213,6 +215,16 @@ function Game() {
               type="button"
               onClick={() => {
                 sfx.play("open");
+                setRetreatOpen(true);
+              }}
+              className="koma px-3 py-1 text-xs font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
+            >
+              撤退
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                sfx.play("open");
                 setLogOpen(true);
               }}
               className="koma px-3 py-1 text-xs font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
@@ -271,6 +283,19 @@ function Game() {
         }}
         messages={messages}
         opponentName={character.name}
+      />
+
+      <RetreatDialog
+        open={retreatOpen}
+        onConfirm={() => {
+          // アンマウント時のクリーンアップで読み上げも止まる
+          sfx.play("close");
+          router.push("/");
+        }}
+        onCancel={() => {
+          sfx.play("close");
+          setRetreatOpen(false);
+        }}
       />
 
       {phase === "finisher" && stats && (
