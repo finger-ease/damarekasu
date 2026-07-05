@@ -36,7 +36,8 @@ export function ChatLog({ open, onClose, messages, opponentName }: Props) {
               <button
                 type="button"
                 onClick={onClose}
-                className="koma px-3 py-1 text-sm font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
+                // 右上に常駐する MuteButton と重ならないよう左に避ける
+                className="koma mr-24 px-3 py-1 text-sm font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
               >
                 閉じる
               </button>

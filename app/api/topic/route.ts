@@ -5,7 +5,7 @@ import type { TopicResponse } from "@/lib/types";
 
 export const maxDuration = 300;
 
-const MAX_TOPIC_LENGTH = 60;
+const MAX_TOPIC_LENGTH = 80;
 
 export async function POST(req: Request) {
   try {
