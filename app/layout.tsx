@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MuteButton } from "@/components/MuteButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className="h-full antialiased">
-      <body className="halftone min-h-full flex flex-col">{children}</body>
+      <body className="halftone min-h-full flex flex-col">
+        <MuteButton />
+        {children}
+      </body>
     </html>
   );
 }

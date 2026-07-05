@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CharacterPortrait } from "@/components/CharacterPortrait";
 import { CHARACTERS, type Character } from "@/lib/characters";
 import { loadRecords, type CharacterRecord } from "@/lib/records";
+import { sfx } from "@/lib/sfx";
 
 export default function SelectPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function SelectPage() {
 
   const start = () => {
     if (!selected || !topic.trim()) return;
+    sfx.play("start");
     router.push(`/play?c=${selected.id}&topic=${encodeURIComponent(topic.trim())}`);
   };
 
@@ -51,7 +53,10 @@ export default function SelectPage() {
             <motion.button
               key={c.id}
               type="button"
-              onClick={() => setSelected(c)}
+              onClick={() => {
+                sfx.play("select");
+                setSelected(c);
+              }}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.12 }}

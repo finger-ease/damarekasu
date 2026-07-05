@@ -14,6 +14,7 @@ import { ResultScreen } from "@/components/ResultScreen";
 import { getCharacter } from "@/lib/characters";
 import { GAUGE_MAX, calcScore, finisherLevel, gaugeGain, grantTitle, type GameStats } from "@/lib/game";
 import { loadRecords, saveResult } from "@/lib/records";
+import { sfx } from "@/lib/sfx";
 import type { ChatMessage, Emotion, FeedbackResult, SessionResponse } from "@/lib/types";
 
 export default function PlayPage() {
@@ -55,9 +56,12 @@ function Game() {
     setMessages((prev) => [...prev, { role: "opponent", text: data.turn.reply, emotion: data.turn.emotion }]);
     setEmotion(data.turn.emotion);
     setSpiky(data.turn.unreasonableness >= 4);
+    sfx.play(data.turn.unreasonableness >= 4 ? "spiky" : "reply");
     statsRef.current.totalUnreasonableness += data.turn.unreasonableness;
     statsRef.current.totalPersuasionDamage += data.turn.persuasionDamage;
+    const prevLevel = finisherLevel(gaugeRef.current);
     gaugeRef.current = Math.min(GAUGE_MAX, gaugeRef.current + gaugeGain(data.turn));
+    if (finisherLevel(gaugeRef.current) > prevLevel) sfx.play("levelup");
     setGauge(gaugeRef.current);
   }, []);
 
@@ -84,6 +88,7 @@ function Game() {
 
   const send = useCallback(
     async (text: string) => {
+      sfx.play("send");
       setMessages((prev) => [...prev, { role: "user", text }]);
       setThinking(true);
       setError(null);
@@ -110,6 +115,7 @@ function Game() {
 
   const fireFinisher = useCallback(() => {
     if (!character) return;
+    sfx.play("fire");
     const finalStats: GameStats = {
       ...statsRef.current,
       gauge: gaugeRef.current,
@@ -188,7 +194,10 @@ function Game() {
             </span>
             <button
               type="button"
-              onClick={() => setLogOpen(true)}
+              onClick={() => {
+                sfx.play("open");
+                setLogOpen(true);
+              }}
               className="koma px-3 py-1 text-xs font-black !shadow-[3px_3px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:!shadow-[2px_2px_0_0_var(--ink)]"
             >
               議事録
@@ -237,7 +246,15 @@ function Game() {
         </p>
       </footer>
 
-      <ChatLog open={logOpen} onClose={() => setLogOpen(false)} messages={messages} opponentName={character.name} />
+      <ChatLog
+        open={logOpen}
+        onClose={() => {
+          sfx.play("close");
+          setLogOpen(false);
+        }}
+        messages={messages}
+        opponentName={character.name}
+      />
 
       {phase === "finisher" && stats && (
         <FinisherOverlay characterId={character.id} level={stats.level} onDone={() => setPhase("result")} />

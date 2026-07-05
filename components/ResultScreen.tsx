@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect } from "react";
 import type { Character } from "@/lib/characters";
 import { calcScore, grantTitle, type GameStats } from "@/lib/game";
+import { sfx } from "@/lib/sfx";
 import type { FeedbackResult } from "@/lib/types";
 
 interface Props {
@@ -19,6 +21,17 @@ interface Props {
 export function ResultScreen({ character, stats, feedback, feedbackError, isNewRecord, onRetry }: Props) {
   const score = calcScore(stats);
   const title = grantTitle(stats);
+
+  // リザルトジングル → 称号朱印(delay 0.5s に同期)→ 自己ベストファンファーレ
+  useEffect(() => {
+    sfx.play("result");
+    const t1 = setTimeout(() => sfx.play("stamp"), 500);
+    const t2 = isNewRecord ? setTimeout(() => sfx.play("record"), 1100) : undefined;
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [isNewRecord]);
 
   return (
     <motion.main
@@ -88,13 +101,17 @@ export function ResultScreen({ character, stats, feedback, feedbackError, isNewR
       <div className="flex flex-wrap gap-4">
         <button
           type="button"
-          onClick={onRetry}
+          onClick={() => {
+            sfx.play("click");
+            onRetry();
+          }}
           className="koma px-6 py-3 text-lg font-black !shadow-[5px_5px_0_0_var(--ink)] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:!shadow-[3px_3px_0_0_var(--ink)]"
         >
           同じ相手にもう一戦
         </button>
         <Link
           href="/"
+          onClick={() => sfx.play("click")}
           className="koma px-6 py-3 text-lg font-black !shadow-[5px_5px_0_0_var(--ink)] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:!shadow-[3px_3px_0_0_var(--ink)]"
         >
           相手を変える

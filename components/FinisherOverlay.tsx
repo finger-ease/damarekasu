@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { CharacterPortrait } from "./CharacterPortrait";
 import { FINISHER_LABEL, type FinisherLevel } from "@/lib/game";
+import { sfx } from "@/lib/sfx";
 
 interface Props {
   characterId: string;
@@ -20,8 +21,15 @@ export function FinisherOverlay({ characterId, level, onDone }: Props) {
   const [stage, setStage] = useState<"slam" | "blow" | "stamp">("slam");
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStage("blow"), 900);
-    const t2 = setTimeout(() => setStage("stamp"), 1700);
+    sfx.play("slam");
+    const t1 = setTimeout(() => {
+      sfx.play("blow");
+      setStage("blow");
+    }, 900);
+    const t2 = setTimeout(() => {
+      sfx.play("stamp");
+      setStage("stamp");
+    }, 1700);
     const t3 = setTimeout(onDone, 3300);
     return () => {
       clearTimeout(t1);
