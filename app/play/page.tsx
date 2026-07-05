@@ -199,6 +199,8 @@ function Game() {
         feedback={feedback}
         feedbackError={feedbackError}
         isNewRecord={isNewRecord}
+        messages={messages}
+        topic={topic}
         onRetry={() => {
           // 全状態を初期化するためリロード遷移
           router.refresh();

@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ChatLog } from "@/components/ChatLog";
 import type { Character } from "@/lib/characters";
 import { calcScore, grantTitle, type GameStats } from "@/lib/game";
 import { sfx } from "@/lib/sfx";
-import type { FeedbackResult } from "@/lib/types";
+import type { ChatMessage, FeedbackResult } from "@/lib/types";
 
 interface Props {
   character: Character;
@@ -14,13 +15,16 @@ interface Props {
   feedback: FeedbackResult | null;
   feedbackError: string | null;
   isNewRecord: boolean;
+  messages: ChatMessage[];
+  topic: string;
   onRetry: () => void;
 }
 
 /** 査定表風のリザルト画面。称号は朱印で押される */
-export function ResultScreen({ character, stats, feedback, feedbackError, isNewRecord, onRetry }: Props) {
+export function ResultScreen({ character, stats, feedback, feedbackError, isNewRecord, messages, topic, onRetry }: Props) {
   const score = calcScore(stats);
   const title = grantTitle(stats);
+  const [logOpen, setLogOpen] = useState(false);
 
   // リザルトジングル → 称号朱印(delay 0.5s に同期)→ 自己ベストファンファーレ
   useEffect(() => {
@@ -102,6 +106,16 @@ export function ResultScreen({ character, stats, feedback, feedbackError, isNewR
         <button
           type="button"
           onClick={() => {
+            sfx.play("open");
+            setLogOpen(true);
+          }}
+          className="koma px-6 py-3 text-lg font-black !shadow-[5px_5px_0_0_var(--ink)] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:!shadow-[3px_3px_0_0_var(--ink)]"
+        >
+          議事録を見返す
+        </button>
+        <button
+          type="button"
+          onClick={() => {
             sfx.play("click");
             onRetry();
           }}
@@ -117,6 +131,17 @@ export function ResultScreen({ character, stats, feedback, feedbackError, isNewR
           相手を変える
         </Link>
       </div>
+
+      <ChatLog
+        open={logOpen}
+        onClose={() => {
+          sfx.play("close");
+          setLogOpen(false);
+        }}
+        messages={messages}
+        opponentName={character.name}
+        topic={topic}
+      />
     </motion.main>
   );
 }
