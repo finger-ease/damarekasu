@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 黙れカス — 想定問答バトル
 
-## Getting Started
+「渋い決裁者」「無茶を言うクライアント」「細かい経理」を演じるAIに提案をぶつけて、想定問答を本気で練習するローカルWebゲーム。
+相手はターンを追うごとに理不尽さをエスカレートさせる。真面目に打ち返すほど**カタルシスゲージ**が溜まり、我慢の限界が来たら必殺の印鑑——**「黙れカス」**を叩き込んで撃退する(ゲーム終了)。終了後はAIコーチが、良かった返し・弱かった返し・実戦へのアドバイスを講評してくれる。
 
-First, run the development server:
+## 前提
+
+- Node.js 20以上
+- **Claude Code CLI**(`claude`)がインストール済みで、ログイン済みであること
+  - このアプリはAPIキーを使わず、`claude -p`(ヘッドレスモード)を子プロセスとして呼び出す
+
+## 起動
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 を開く。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 相手の応答には1ターンあたり数秒〜20秒程度かかる(手元のClaude Codeが演技を考えている時間)
+- 使用モデルは環境変数 `DAMARE_MODEL` で変更可能(既定: `sonnet`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 遊び方
 
-## Learn More
+1. 名刺から対戦相手を指名し、「件名」に今日通したい提案を書いて開戦
+2. 相手の理不尽な打ち返しに、冷静に・具体的に反論する(良い返しほどゲージが溜まる)
+3. 我慢の限界が来たら右下の印鑑を押す。ゲージLvが高いほど演出とスコア倍率が派手になる
+4. 査定表で称号とスコアを確認し、コーチ講評を実戦に持ち帰る
 
-To learn more about Next.js, take a look at the following resources:
+## イラストの差し替え(外注)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+現在の立ち絵はプレースホルダーSVG。外注イラスト(1024×1024 透過PNG)を
+`public/characters/<キャラID>/<表情>.png` に置くだけで自動的に差し替わる(PNG優先・なければSVGにフォールバック)。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 発注仕様: [docs/illustration-spec.md](docs/illustration-spec.md)
+- 全18カットの発注プロンプト(日英): [docs/illustration-prompts.md](docs/illustration-prompts.md)
 
-## Deploy on Vercel
+## 構成
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `lib/claude.ts` — `claude -p` のspawnラッパー(初回 `--system-prompt` / 継続 `--resume`)
+- `lib/characters.ts` — キャラ定義とシステムプロンプト
+- `lib/game.ts` — ゲージ計算・必殺レベル・称号判定
+- `app/api/{session,message,feedback}` — ゲームAPI
+- `app/page.tsx` / `app/play/page.tsx` — キャラ選択 / バトル〜リザルト
+- `scripts/test-claude.ts` — ラッパー単体検証(`npx tsx scripts/test-claude.ts`)
+- `scripts/gen-placeholders.mjs` — プレースホルダーSVG再生成

@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 昭和ビジネス漫画 × 格闘ゲームHUD */
+  --paper: #f6f1e5;      /* マンガ用紙 */
+  --ink: #1b1a17;        /* 墨 */
+  --shu: #cf2318;        /* 朱肉 */
+  --tone: #cfc8b6;       /* 網点グレー */
+  --gold: #b98a2c;       /* 座布団の金 */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-shu: var(--shu);
+  --color-tone: var(--tone);
+  --color-gold: var(--gold);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  font-feature-settings: "palt";
+}
+
+/* マンガ用紙: 網点 */
+.halftone {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--tone) 1px, transparent 1.5px);
+  background-size: 14px 14px;
+}
+
+/* 見出し: 漫画の描き文字 */
+.manga-display {
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  -webkit-text-stroke: 0;
+}
+
+/* 墨の枠線(コマ枠) */
+.koma {
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 0 var(--ink);
+  background: var(--paper);
+}
+
+/* 集中線(必殺演出・激怒時) */
+.speedlines {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    var(--ink) 0deg 1.2deg,
+    transparent 1.2deg 7deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 26%, black 62%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 26%, black 62%);
+}
+
+/* 画面シェイク */
+@keyframes shake-screen {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-14px, 8px) rotate(-1deg); }
+  20% { transform: translate(12px, -10px) rotate(1.2deg); }
+  30% { transform: translate(-10px, -6px) rotate(-0.8deg); }
+  40% { transform: translate(10px, 10px) rotate(0.6deg); }
+  50% { transform: translate(-8px, 4px) rotate(-0.5deg); }
+  60% { transform: translate(6px, -6px) rotate(0.4deg); }
+  70% { transform: translate(-4px, 4px) rotate(-0.3deg); }
+  80% { transform: translate(4px, 2px) rotate(0.2deg); }
+  90% { transform: translate(-2px, -2px) rotate(-0.1deg); }
+}
+.shake-hard { animation: shake-screen 0.5s linear 3; }
+.shake-soft { animation: shake-screen 0.4s linear 1; }
+
+/* 立ち絵の怒りプルプル */
+@keyframes tremble {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+.tremble { animation: tremble 0.12s linear infinite; }
+
+/* 考え中の腕組みゆらゆら */
+@keyframes ponder {
+  0%, 100% { transform: rotate(-1deg) translateY(0); }
+  50% { transform: rotate(1deg) translateY(-6px); }
+}
+.ponder { animation: ponder 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .shake-hard, .shake-soft, .tremble, .ponder { animation: none; }
 }
