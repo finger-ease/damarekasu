@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <g transform="rotate(-9 512 512)">
+
+    <path d="M 212 1024 Q 222 635 392 585 L 452 535 L 572 535 L 632 585 Q 802 635 812 1024 Z" fill="#166534"/>
+    <path d="M 242 872 Q 512 792 782 872" stroke="#f0fdf4" stroke-width="14" fill="none"/>
+    <path d="M 246 916 Q 512 836 778 916" stroke="#f0fdf4" stroke-width="14" fill="none"/>
+    <path d="M 452 535 L 512 635 L 572 535 L 552 529 L 512 585 L 472 529 Z" fill="#f0fdf4"/>
+    <path d="M 462 542 L 506 690 M 562 542 L 518 690" stroke="#facc15" stroke-width="9" fill="none"/>
+    <rect x="524" y="682" width="42" height="18" rx="7" fill="#d4d4d8" stroke="#52525b" stroke-width="6"/>
+    <circle cx="512" cy="706" r="26" fill="#d4d4d8" stroke="#52525b" stroke-width="6"/>
+    <rect x="457" y="500" width="110" height="90" fill="#e8b98a"/>
+    <ellipse cx="307" cy="390" rx="28" ry="40" fill="#e8b98a"/>
+    <ellipse cx="717" cy="390" rx="28" ry="40" fill="#e8b98a"/>
+    <ellipse cx="512" cy="380" rx="210" ry="225" fill="#e8b98a"/>
+
+        <path d="M 317 360 L 317 143 L 707 143 L 707 360 Q 647 254 512 249 Q 377 254 317 360 Z" fill="#1c1917"/>
+    <rect x="374" y="290" width="106" height="26" rx="10" fill="#1c1917" transform="rotate(-20 427 303)"/><rect x="544" y="290" width="106" height="26" rx="10" fill="#1c1917" transform="rotate(20 597 303)"/>
+        <line x1="407" y1="340" x2="447" y2="380" stroke="#1c1917" stroke-width="11" stroke-linecap="round"/>
+        <line x1="447" y1="340" x2="407" y2="380" stroke="#1c1917" stroke-width="11" stroke-linecap="round"/>
+        <line x1="577" y1="340" x2="617" y2="380" stroke="#1c1917" stroke-width="11" stroke-linecap="round"/>
+        <line x1="617" y1="340" x2="577" y2="380" stroke="#1c1917" stroke-width="11" stroke-linecap="round"/>
+    <ellipse cx="512" cy="425" rx="16" ry="22" fill="#ae8b68"/>
+    <path d="M 468 491 Q 490 475 512 491 Q 534 507 556 491" stroke="#7f1d1d" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M 702 320 q 22 34 0 52 q -22 -18 0 -52 Z" fill="#7dd3fc"/><g stroke="#a1a1aa" stroke-width="8" fill="none" stroke-linecap="round">
+      <path d="M 502 115 a 26 26 0 1 1 26 -26 a 18 18 0 1 0 -40 12"/>
+    </g>
+  </g>
+</svg>
